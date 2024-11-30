@@ -1,0 +1,41 @@
+--create database
+CREATE DATABASE HealthcareDB;
+
+--create schema
+CREATE SCHEMA Healthcare;
+
+--create table patientrecords
+
+CREATE OR REPLACE TABLE PatientRecords (
+    PatientID INT IDENTITY(1, 1),            -- Unique patient identifier
+    Name STRING,                           -- Patient name
+    Diagnosis STRING,                      -- Diagnosis description
+    AdmissionDate DATE,                    -- Admission date
+    DischargeDate DATE,                    -- Discharge date
+    Region STRING,                         -- Region or hospital location
+    Age INT,                               -- Patient's age
+    TotalBill FLOAT,                       -- Total bill amount
+    InsuranceProvider STRING               -- Insurance provider
+);
+--create file format for csv
+
+CREATE FILE FORMAT my_csv_format TYPE=CSV
+FIELD_OPTIONALLY_ENCLOSED_BY='"'
+SKIP_HEADER=1;
+
+-- create external stage for S3 bucket
+
+CREATE OR REPLACE STAGE patient_stage
+URL = 's3://myfirstawsbucketmehnazanjum/2024-11-30 12_02am.csv'
+CREDENTIALS=(AWS_KEY_ID='my_aws_key
+' AWS_SECRET_KEY='my_secret_key
+');
+-- load the data
+
+COPY INTO PatientRecords
+FROM @patient_stage
+FILE_FORMAT = (FORMAT_NAME = 'my_csv_format');
+
+--Verify table is populated with data from csv file
+
+Select * from PatientRecords

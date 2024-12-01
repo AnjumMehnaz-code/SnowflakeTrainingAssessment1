@@ -1,4 +1,6 @@
---create database
+ Load Patient Data into Snowflake
+
+--create database Healthcare
 CREATE DATABASE HealthcareDB;
 
 --create schema
@@ -17,6 +19,7 @@ CREATE OR REPLACE TABLE PatientRecords (
     TotalBill FLOAT,                       -- Total bill amount
     InsuranceProvider STRING               -- Insurance provider
 );
+
 --create file format for csv
 
 CREATE FILE FORMAT my_csv_format TYPE=CSV
